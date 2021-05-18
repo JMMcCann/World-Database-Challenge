@@ -1,0 +1,77 @@
+SHOW databases;
+USE world;
+SHOW tables;
+SELECT * FROM city;
+SELECT * FROM country;
+SELECT * FROM countrylanguage;
+
+##TASK 1
+SELECT COUNT(name) FROM city WHERE CountryCode = "USA";
+
+##TASK 2
+SELECT Population, LifeExpectancy FROM country WHERE Name="Argentina";
+
+##TASK 3
+SELECT Name FROM country WHERE LifeExpectancy IS NOT NULL ORDER BY LifeExpectancy DESC LIMIT 1;
+
+##TASK 4
+SELECT city.name, country.name
+From city
+JOIN country ON country.Capital=city.ID
+WHERE Country.name="Spain";
+
+##TASK 5
+SELECT countrylanguage.Language
+From countrylanguage
+JOIN country ON country.Code=countrylanguage.CountryCode
+WHERE Region="Southeast Asia";
+
+##TASK 6
+SELECT Name FROM city WHERE Name LIKE "F%" LIMIT 25;
+
+##TASK 7
+SELECT COUNT(city.name)
+From city
+JOIN country ON country.Code=city.CountryCode
+WHERE Country.name="China";
+
+##TASK 8
+SELECT Name 
+FROM country 
+WHERE Population=(
+SELECT MIN(Population)
+FROM country
+Where Population>0
+ORDER BY Population LIMIT 1
+);
+
+##TASK 9
+SELECT COUNT(DISTINCT Code) FROM country; ##239
+SELECT COUNT(DISTINCT CountryCode) FROM city; ##232 (?)
+SELECT COUNT(DISTINCT Name) FROM country WHERE Name IS NOT NULL; ##239 
+
+##TASK 10
+SELECT Name, SurfaceArea FROM country ORDER BY SurfaceArea DESC LIMIT 10;
+
+##TASK 11
+SELECT city.name, city.population
+FROM city
+JOIN country on country.Code=city.CountryCode
+WHERE Country.name="Japan"
+ORDER BY Population DESC LIMIT 5;
+
+##TASK 12
+set sql_safe_updates = 0;
+
+UPDATE country
+SET HeadOfState = "Elizabeth II"
+Where HeadOfState = "Elisabeth II";
+
+SELECT name, code FROM country WHERE HeadOfState = "Elizabeth II";
+
+##TASK 13
+SELECT *
+FROM (SELECT Name, SurfaceArea, Population, Population/SurfaceArea AS ratio FROM country
+WHERE Population IS NOT NULL
+AND Population != 0) AS anything
+ORDER BY ratio ASC LIMIT 10;
